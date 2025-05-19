@@ -1,0 +1,10 @@
+"Question","p_value","t_statistic","mean_gmap","mean_amap","ci_lower","ci_upper","n_gmap","n_amap"
+"Visual Design",0,7.319,3.31,4.207,0.656,1.139,142,111
+"Meets Needs",0.6173,0.5,3.62,3.673,-0.156,0.262,142,110
+"Public Transport Updates",0.0014,3.223,3.007,3.4,0.153,0.633,137,110
+"Public Transport Coverage",0.0017,-3.183,3.686,3.291,-0.64,-0.151,137,110
+"Arrival/Departure Time Adjustment",0.5628,-0.579,3.79,3.725,-0.286,0.156,138,109
+"Find Stops/Stations",0.0629,1.868,3.478,3.709,-0.013,0.474,138,110
+"Share Route/ETA",1e-04,3.962,3.218,3.771,0.278,0.827,133,109
+"Multiple Stops",0.722,0.356,3.431,3.482,-0.232,0.334,137,110
+"Schedule Match",0,6.336,3.38,4.271,0.614,1.169,137,107

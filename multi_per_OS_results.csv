@@ -1,0 +1,6 @@
+"Option","p_value","chi_squared","df","n"
+"Incomplete or missing transport information",0.8959,0.22,2,163
+"Inaccurate or unreliable route and time data",0.666,0.813,2,163
+"Lack of real-time updates",0.6818,0.766,2,163
+"Poor route planning, usability, and/or unclear directions",0.2084,3.137,2,163
+"No details about comfort or service quality (accessibility, crowds, comfort, etc.)",0.3194,2.283,2,163

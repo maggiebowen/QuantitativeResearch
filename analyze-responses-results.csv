@@ -1,0 +1,168 @@
+"Question","Rating","Count","Percentage"
+"Gender","Female",59,36.2
+"Gender","Male",104,63.8
+"Age","between 18 and 24 years old",60,36.8
+"Age","between 25 and 34 years old",73,44.8
+"Age","between 35 and 44 years old",19,11.7
+"Age","between 45 and 54 years old",9,5.5
+"Age","between 55 and 59 years old",2,1.2
+"Employment Status","I am employed",67,41.4
+"Employment Status","I am self-employed",11,6.8
+"Employment Status","I am unemployed",5,3.1
+"Employment Status","I am a student",54,33.3
+"Employment Status","I am a student and I work (internship, etc.)",25,15.4
+"Operating System","Android",37,22.7
+"Operating System","iOS (iPhone)",109,66.9
+"Operating System","Both, I have more than one phone",17,10.4
+"Google Maps Usage","Yes",142,87.1
+"Google Maps Usage","No",21,12.9
+"Apple Maps Usage","Yes",112,68.7
+"Apple Maps Usage","No",51,31.3
+"Gmaps Public Transport","terrible",6,4.2
+"Gmaps Public Transport","bad",9,6.3
+"Gmaps Public Transport","average",46,32.4
+"Gmaps Public Transport","good",64,45.1
+"Gmaps Public Transport","excellent",17,12
+"Gmaps Real-Time Info","terrible",6,4.2
+"Gmaps Real-Time Info","bad",35,24.6
+"Gmaps Real-Time Info","average",49,34.5
+"Gmaps Real-Time Info","good",40,28.2
+"Gmaps Real-Time Info","excellent",12,8.5
+"Gmaps Navigation","terrible",3,2.1
+"Gmaps Navigation","bad",17,12
+"Gmaps Navigation","average",36,25.4
+"Gmaps Navigation","good",64,45.1
+"Gmaps Navigation","excellent",22,15.5
+"Gmaps Ease of Use","terrible",8,5.6
+"Gmaps Ease of Use","bad",25,17.6
+"Gmaps Ease of Use","average",38,26.8
+"Gmaps Ease of Use","good",51,35.9
+"Gmaps Ease of Use","excellent",20,14.1
+"Gmaps Offline Access","terrible",10,7
+"Gmaps Offline Access","bad",18,12.7
+"Gmaps Offline Access","average",60,42.3
+"Gmaps Offline Access","good",49,34.5
+"Gmaps Offline Access","excellent",5,3.5
+"Amaps Public Transport","terrible",4,3.6
+"Amaps Public Transport","bad",6,5.4
+"Amaps Public Transport","average",29,26.1
+"Amaps Public Transport","good",53,47.7
+"Amaps Public Transport","excellent",19,17.1
+"Amaps Real-Time Info","terrible",4,3.6
+"Amaps Real-Time Info","bad",16,14.5
+"Amaps Real-Time Info","average",35,31.8
+"Amaps Real-Time Info","good",41,37.3
+"Amaps Real-Time Info","excellent",14,12.7
+"Amaps Navigation","terrible",1,0.9
+"Amaps Navigation","bad",11,9.9
+"Amaps Navigation","average",33,29.7
+"Amaps Navigation","good",49,44.1
+"Amaps Navigation","excellent",17,15.3
+"Amaps Ease of Use","terrible",2,1.8
+"Amaps Ease of Use","bad",3,2.7
+"Amaps Ease of Use","average",22,19.8
+"Amaps Ease of Use","good",37,33.3
+"Amaps Ease of Use","excellent",47,42.3
+"Amaps Offline Access","terrible",2,1.8
+"Amaps Offline Access","bad",8,7.3
+"Amaps Offline Access","average",45,41.3
+"Amaps Offline Access","good",40,36.7
+"Amaps Offline Access","excellent",14,12.8
+"Gmaps Visual Design","1",15,10.6
+"Gmaps Visual Design","2",20,14.1
+"Gmaps Visual Design","3",29,20.4
+"Gmaps Visual Design","4",62,43.7
+"Gmaps Visual Design","5",16,11.3
+"Gmaps Meets Needs","1",5,3.5
+"Gmaps Meets Needs","2",8,5.6
+"Gmaps Meets Needs","3",37,26.1
+"Gmaps Meets Needs","4",78,54.9
+"Gmaps Meets Needs","5",14,9.9
+"Gmaps Public Transport Updates","1",9,6.6
+"Gmaps Public Transport Updates","2",32,23.4
+"Gmaps Public Transport Updates","3",52,38
+"Gmaps Public Transport Updates","4",37,27
+"Gmaps Public Transport Updates","5",7,5.1
+"Gmaps Public Transport Coverage","1",3,2.2
+"Gmaps Public Transport Coverage","2",13,9.5
+"Gmaps Public Transport Coverage","3",32,23.4
+"Gmaps Public Transport Coverage","4",65,47.4
+"Gmaps Public Transport Coverage","5",24,17.5
+"Gmaps Arrival and Departure Times","1",4,2.9
+"Gmaps Arrival and Departure Times","2",9,6.5
+"Gmaps Arrival and Departure Times","3",33,23.9
+"Gmaps Arrival and Departure Times","4",58,42
+"Gmaps Arrival and Departure Times","5",34,24.6
+"Gmaps Find Stops and Stations","1",3,2.2
+"Gmaps Find Stops and Stations","2",23,16.7
+"Gmaps Find Stops and Stations","3",39,28.3
+"Gmaps Find Stops and Stations","4",51,37
+"Gmaps Find Stops and Stations","5",22,15.9
+"Gmaps Share ETA","1",9,6.8
+"Gmaps Share ETA","2",21,15.8
+"Gmaps Share ETA","3",50,37.6
+"Gmaps Share ETA","4",38,28.6
+"Gmaps Share ETA","5",15,11.3
+"Gmaps Multiple Stops","1",7,5.1
+"Gmaps Multiple Stops","2",23,16.8
+"Gmaps Multiple Stops","3",34,24.8
+"Gmaps Multiple Stops","4",50,36.5
+"Gmaps Multiple Stops","5",23,16.8
+"Gmaps Schedule Match","1",2,1.5
+"Gmaps Schedule Match","2",17,12.4
+"Gmaps Schedule Match","3",53,38.7
+"Gmaps Schedule Match","4",57,41.6
+"Gmaps Schedule Match","5",8,5.8
+"Amaps Visual Design","2",2,1.8
+"Amaps Visual Design","3",18,16.2
+"Amaps Visual Design","4",46,41.4
+"Amaps Visual Design","5",45,40.5
+"Amaps Meets Needs","1",2,1.8
+"Amaps Meets Needs","2",5,4.5
+"Amaps Meets Needs","3",32,29.1
+"Amaps Meets Needs","4",59,53.6
+"Amaps Meets Needs","5",12,10.9
+"Amaps Public Transport Updates","1",4,3.6
+"Amaps Public Transport Updates","2",10,9.1
+"Amaps Public Transport Updates","3",45,40.9
+"Amaps Public Transport Updates","4",40,36.4
+"Amaps Public Transport Updates","5",11,10
+"Amaps Public Transport Coverage","1",6,5.5
+"Amaps Public Transport Coverage","2",15,13.6
+"Amaps Public Transport Coverage","3",39,35.5
+"Amaps Public Transport Coverage","4",41,37.3
+"Amaps Public Transport Coverage","5",9,8.2
+"Amaps Arrival and Departure Times","2",5,4.6
+"Amaps Arrival and Departure Times","3",37,33.9
+"Amaps Arrival and Departure Times","4",50,45.9
+"Amaps Arrival and Departure Times","5",17,15.6
+"Amaps Find Stops and Stations","1",2,1.8
+"Amaps Find Stops and Stations","2",7,6.4
+"Amaps Find Stops and Stations","3",34,30.9
+"Amaps Find Stops and Stations","4",45,40.9
+"Amaps Find Stops and Stations","5",22,20
+"Amaps Share ETA","1",5,4.6
+"Amaps Share ETA","2",6,5.5
+"Amaps Share ETA","3",32,29.4
+"Amaps Share ETA","4",32,29.4
+"Amaps Share ETA","5",34,31.2
+"Amaps Multiple Stops","1",9,8.2
+"Amaps Multiple Stops","2",10,9.1
+"Amaps Multiple Stops","3",29,26.4
+"Amaps Multiple Stops","4",43,39.1
+"Amaps Multiple Stops","5",19,17.3
+"Amaps Schedule Match","1",9,8.4
+"Amaps Schedule Match","2",1,0.9
+"Amaps Schedule Match","3",16,15
+"Amaps Schedule Match","4",7,6.5
+"Amaps Schedule Match","5",74,69.2
+"Multi-select Google Maps Not Used","Inaccurate or outdated transit info in my area",9,16.1
+"Multi-select Google Maps Not Used","Prefer simpler or more minimal design",10,17.9
+"Multi-select Google Maps Not Used","Privacy concerns about data tracking",14,25
+"Multi-select Google Maps Not Used","Too cluttered or overwhelming interface",13,23.2
+"Multi-select Google Maps Not Used","Too many unnecessary features",10,17.9
+"Multi-select Apple Maps Not Used","Fewer transit details compared to Google Maps",7,8
+"Multi-select Apple Maps Not Used","Less accurate or delayed real-time info",7,8
+"Multi-select Apple Maps Not Used","Limited to Apple devices",26,29.9
+"Multi-select Apple Maps Not Used","Not familiar with the interface",17,19.5
+"Multi-select Apple Maps Not Used","Prefer Google ecosystem or apps",30,34.5

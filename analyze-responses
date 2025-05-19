@@ -1,0 +1,337 @@
+# Load data without converting strings to factors
+data <- read.csv('/Users/maggiebowen/Documents/R/FINAL_MERGED_ANSWERS.csv', stringsAsFactors = FALSE)
+
+#  ---- helper functions ----
+analyze_categorical <- function(column_data, levels = NULL, label = NULL) {
+  cleaned <- trimws(gsub("[^[:print:]]", "", na.omit(column_data)))
+  cleaned <- cleaned[cleaned != ""]
+  if (!is.null(levels)) {
+    cleaned <- factor(cleaned, levels = levels, ordered = TRUE)
+  }
+  tab <- table(cleaned)
+  tab <- tab[tab > 0]  # Remove zero counts
+  percent <- round(prop.table(tab) * 100, 1)
+  summary <- data.frame(
+    Rating = names(tab),
+    Count = as.vector(tab),
+    Percentage = as.vector(percent),
+    Question = label
+  )
+  return(summary)
+}
+
+analyze_likert <- function(column_data, label) {
+  levels <- c("terrible", "bad", "average", "good", "excellent")
+  cleaned <- tolower(trimws(gsub("[^[:print:]]", "", column_data)))
+  cleaned <- cleaned[cleaned != ""]
+  factored <- factor(cleaned, levels = levels, ordered = TRUE)
+  tab <- table(factored)
+  tab <- tab[tab > 0]  # Remove zero counts
+  percent <- round(prop.table(tab) * 100, 1)
+  return(data.frame(
+    Rating = names(tab),
+    Count = as.vector(tab),
+    Percentage = as.vector(percent),
+    Question = label
+  ))
+}
+
+analyze_scale_1to5 <- function(column_data, label) {
+  levels <- c("1", "2", "3", "4", "5")
+  cleaned <- trimws(gsub("[^[:print:]]", "", column_data))
+  cleaned <- cleaned[cleaned != ""]  
+  factored <- factor(cleaned, levels = levels, ordered = TRUE)
+  tab <- table(factored)
+  tab <- tab[tab > 0]  # Remove zero counts
+  percent <- round(prop.table(tab) * 100, 1)
+  return(data.frame(
+    Rating = names(tab),
+    Count = as.vector(tab),
+    Percentage = as.vector(percent),
+    Question = label
+  ))
+}
+
+analyze_multiselect <- function(column_data, label) {
+  cleaned <- trimws(gsub("[^[:print:],]", "", na.omit(column_data)))
+  cleaned <- cleaned[cleaned != ""]
+  split_answers <- unlist(strsplit(cleaned, ","))
+  split_answers <- trimws(split_answers)
+  tab <- table(factor(split_answers))
+  percent <- round(prop.table(tab) * 100, 1)
+  return(data.frame(
+    Rating = names(tab),
+    Count = as.vector(tab),
+    Percentage = as.vector(percent),
+    Question = label
+  ))
+}
+
+# ---- T-TESTS ----
+run_ttest <- function(gmap_col_index, amap_col_index, label, df) {
+  # Extract columns and convert to numeric
+  gmap_raw <- as.numeric(trimws(df[[gmap_col_index]]))
+  amap_raw <- as.numeric(trimws(df[[amap_col_index]]))
+  
+  # Remove NAs
+  gmap_vals <- na.omit(gmap_raw)
+  amap_vals <- na.omit(amap_raw)
+
+  # combine data frame
+  ratings <- c(gmap_vals, amap_vals)
+  app <- factor(c(rep("Google Maps", length(gmap_vals)), rep("Apple Maps", length(amap_vals))))
+  df_long <- data.frame(rating = ratings, app = app)
+
+  # Run independent t-test with confidence interval
+  test_result <- t.test(rating ~ app, data = df_long, conf.level = 0.95)
+
+  return(data.frame(
+    Question = label,
+    p_value = round(test_result$p.value, 4),
+    t_statistic = round(test_result$statistic, 3),
+    mean_gmap = round(mean(gmap_vals), 3),
+    mean_amap = round(mean(amap_vals), 3),
+    ci_lower = round(test_result$conf.int[1], 3),
+    ci_upper = round(test_result$conf.int[2], 3),
+    n_gmap = length(gmap_vals),
+    n_amap = length(amap_vals)
+  ))
+}
+
+# ---- Mann-Whitney U test ----
+run_likert_test <- function(gmap_col_index, amap_col_index, label, df) {
+  likert_levels <- c("terrible", "bad", "average", "good", "excellent")
+
+  # Clean and factor responses
+  gmap_raw <- tolower(trimws(df[[gmap_col_index]]))
+  amap_raw <- tolower(trimws(df[[amap_col_index]]))
+
+  gmap_clean <- factor(gmap_raw[gmap_raw %in% likert_levels], levels = likert_levels, ordered = TRUE)
+  amap_clean <- factor(amap_raw[amap_raw %in% likert_levels], levels = likert_levels, ordered = TRUE)
+
+  gmap_numeric <- as.numeric(gmap_clean)
+  amap_numeric <- as.numeric(amap_clean)
+
+  # Remove NA values
+  gmap_vals <- na.omit(gmap_numeric)
+  amap_vals <- na.omit(amap_numeric)
+
+  # Run Mann-Whitney U test
+  test_result <- wilcox.test(gmap_vals, amap_vals)
+
+  return(data.frame(
+    Question = label,
+    p_value = round(test_result$p.value, 4),
+    W_statistic = round(test_result$statistic, 3),
+    median_gmap = median(gmap_vals),
+    median_amap = median(amap_vals),
+    n_gmap = length(gmap_vals),
+    n_amap = length(amap_vals)
+  ))
+}
+
+# ---- PERSONAL DATA ----
+# gender + age
+gender_summary <- analyze_categorical(data[[2]], label = "Gender")
+age_summary <- analyze_categorical(data[[3]], 
+  levels = c("between 18 and 24 years old", "between 25 and 34 years old", 
+             "between 35 and 44 years old", "between 45 and 54 years old", 
+             "between 55 and 59 years old", "60 years old or more"), 
+  label = "Age")
+
+# employment status
+employment_summary <- analyze_categorical(data[[5]], 
+  levels = c("I am employed", "I am self-employed", "I am unemployed", 
+             "I am a student", "I am a student and I work (internship, etc.)"), 
+  label = "Employment Status")
+
+# operating system
+os_summary <- analyze_categorical(data[[6]], 
+  levels = c("Android", "iOS (iPhone)", "Both, I have more than one phone"), 
+  label = "Operating System")
+
+#  do they use the given app?
+gmap_summary <- analyze_categorical(data[[19]], levels = c("Yes", "No"), label = "Google Maps Usage")
+amaps_summary <- analyze_categorical(data[[37]], levels = c("Yes", "No"), label = "Apple Maps Usage")
+
+# how frequently do they use the app?
+gmap_frequency_summary <- analyze_categorical(data[[21]], 
+  levels = c("Daily", "Weekly", "Monthly", "Rarely", "Never"), label = "Google Maps Frequency")
+amaps_frequency_summary <- analyze_categorical(data[[39]],
+  levels = c("Daily", "Weekly", "Monthly", "Rarely", "Never"), label = "Apple Maps Frequency")
+
+# why don't you use the app? 
+gmap_not_used_summary <- analyze_multiselect(data[[20]], label = "Multi-select Google Maps Not Used")
+amaps_not_used_summary <- analyze_multiselect(data[[38]], label = "Multi-select Apple Maps Not Used")
+
+# LIKERT RESPONSES
+# ---- Google Maps ----
+gmap_pub_transport_summary <- analyze_likert(data[[22]], "Gmaps Public Transport")
+gmap_real_time_summary     <- analyze_likert(data[[23]], "Gmaps Real-Time Info")
+gmap_nav_summary           <- analyze_likert(data[[24]], "Gmaps Navigation")
+gmap_ease_summary          <- analyze_likert(data[[25]], "Gmaps Ease of Use")
+gmap_offline_summary       <- analyze_likert(data[[26]], "Gmaps Offline Access")
+
+gmap_combined_likert_summary <- rbind(
+  gmap_pub_transport_summary,
+  gmap_real_time_summary,
+  gmap_nav_summary,
+  gmap_ease_summary,
+  gmap_offline_summary
+)
+
+# ---- Apple Maps ----
+amap_pub_transport_summary <- analyze_likert(data[[40]], "Amaps Public Transport")
+amap_real_time_summary     <- analyze_likert(data[[41]], "Amaps Real-Time Info")
+amap_nav_summary           <- analyze_likert(data[[42]], "Amaps Navigation")
+amap_ease_summary          <- analyze_likert(data[[43]], "Amaps Ease of Use")
+amap_offline_summary       <- analyze_likert(data[[44]], "Amaps Offline Access")
+
+amap_combined_likert_summary <- rbind(
+  amap_pub_transport_summary,
+  amap_real_time_summary,
+  amap_nav_summary,
+  amap_ease_summary,
+  amap_offline_summary
+)
+
+# NUMERIC 1–5 QUESTIONS
+# ---- Google Maps ----
+gmap_design_summary <- analyze_scale_1to5(data[[27]], "Gmaps Visual Design")
+gmap_meets_needs_summary <- analyze_scale_1to5(data[[28]], "Gmaps Meets Needs")
+gmap_pub_transport_updates <- analyze_scale_1to5(data[[29]], "Gmaps Public Transport Updates")
+gmap_pub_transport_coverage <- analyze_scale_1to5(data[[30]], "Gmaps Public Transport Coverage")
+gmap_time_adjust <- analyze_scale_1to5(data[[31]], "Gmaps Arrival and Departure Times")
+gmap_find_stops <- analyze_scale_1to5(data[[32]], "Gmaps Find Stops and Stations")
+gmap_share_ETA <- analyze_scale_1to5(data[[33]], "Gmaps Share ETA")
+gmap_multiple_stops <- analyze_scale_1to5(data[[34]], "Gmaps Multiple Stops")
+gmap_schedule_match <- analyze_scale_1to5(data[[35]], "Gmaps Schedule Match")
+
+# ---- Apple Maps ----
+amap_design_summary <- analyze_scale_1to5(data[[45]], "Amaps Visual Design")
+amap_meets_needs_summary <- analyze_scale_1to5(data[[46]], "Amaps Meets Needs")
+amap_pub_transport_updates <- analyze_scale_1to5(data[[47]], "Amaps Public Transport Updates")
+amap_pub_transport_coverage <- analyze_scale_1to5(data[[48]], "Amaps Public Transport Coverage")
+amap_time_adjust <- analyze_scale_1to5(data[[49]], "Amaps Arrival and Departure Times")
+amap_find_stops <- analyze_scale_1to5(data[[50]], "Amaps Find Stops and Stations")
+amap_share_ETA <- analyze_scale_1to5(data[[51]], "Amaps Share ETA")
+amap_multiple_stops <- analyze_scale_1to5(data[[52]], "Amaps Multiple Stops")
+amap_schedule_match <- analyze_scale_1to5(data[[53]], "Amaps Schedule Match")
+
+# ---- T-TESTS calls ----
+ttest_pairs <- list(
+  c(27, 45),  # Visual Design
+  c(28, 46),  # Meets Needs
+  c(29, 47),  # Public Transport Updates
+  c(30, 48),  # Public Transport Coverage
+  c(31, 49),  # Time Adjustment
+  c(32, 50),  # Find Stops
+  c(33, 51),  # Share ETA
+  c(34, 52),  # Multiple Stops
+  c(35, 53)   # Schedule Match
+)
+
+ttest_labels <- c(
+  "Visual Design",
+  "Meets Needs",
+  "Public Transport Updates",
+  "Public Transport Coverage",
+  "Arrival/Departure Time Adjustment",
+  "Find Stops/Stations",
+  "Share Route/ETA",
+  "Multiple Stops",
+  "Schedule Match"
+)
+
+likert_pairs <- list(
+  c(22, 40),  # Public Transport
+  c(23, 41),  # Real-Time Info
+  c(24, 42),  # Navigation
+  c(25, 43),  # Ease of Use
+  c(26, 44)   # Offline Access
+)
+
+likert_labels <- c(
+  "Public Transport",
+  "Real-Time Info",
+  "Navigation",
+  "Ease of Use",
+  "Offline Access"
+)
+
+# ---- Combine into one summary table ----
+all_summaries <- rbind(
+  gender_summary,
+  age_summary,
+  employment_summary,
+  os_summary,
+  gmap_summary,
+  amaps_summary,
+  gmap_combined_likert_summary,
+  amap_combined_likert_summary,
+  gmap_design_summary,
+  gmap_meets_needs_summary,
+  gmap_pub_transport_updates,
+  gmap_pub_transport_coverage,
+  gmap_time_adjust,
+  gmap_find_stops,
+  gmap_share_ETA,
+  gmap_multiple_stops,
+  gmap_schedule_match,
+  amap_design_summary,
+  amap_meets_needs_summary,
+  amap_pub_transport_updates,
+  amap_pub_transport_coverage,
+  amap_time_adjust,
+  amap_find_stops,
+  amap_share_ETA,
+  amap_multiple_stops,
+  amap_schedule_match,
+  gmap_not_used_summary,
+  amaps_not_used_summary
+)
+
+print(all_summaries)
+
+# ---- overall output ----
+# Create a list of unique rating levels
+ratings <- unique(all_summaries$Rating)
+
+# Create a named list to store each separate table
+rating_tables <- list()
+
+# Loop through each rating and filter the summary
+for (r in ratings) {
+  tbl <- subset(all_summaries, Rating == r, select = c("Question", "Count", "Percentage"))
+  rating_tables[[r]] <- tbl
+}
+
+# Reorder columns and export to CSV
+write.csv(all_summaries[, c("Question", "Rating", "Count", "Percentage")],
+          file = "analyze-responses-results.csv",
+          row.names = FALSE)
+
+# Run t-tests
+ttest_results <- do.call(rbind, Map(
+  function(pair, label) run_ttest(pair[1], pair[2], label, data),
+  ttest_pairs,
+  ttest_labels
+))
+
+likert_results <- do.call(rbind, Map(
+  function(pair, label) run_likert_test(pair[1], pair[2], label, data),
+  likert_pairs,
+  likert_labels
+))
+
+print("T-test Results:")
+print(ttest_results)
+
+print("Mann-Whitney U Test Results for Likert Questions:")
+print(likert_results)
+
+# export t-tests to separate CSV
+write.csv(ttest_results, "ttests_results.csv", row.names = FALSE)
+
+# export likert results to separate CSV
+write.csv(likert_results, "likert_test_results.csv", row.names = FALSE)

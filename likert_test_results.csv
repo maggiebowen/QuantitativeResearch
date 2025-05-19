@@ -1,0 +1,6 @@
+"Question","p_value","W_statistic","median_gmap","median_amap","n_gmap","n_amap"
+"Public Transport",0.1583,7119.5,4,4,142,111
+"Real-Time Info",0.0197,6525.5,3,3.5,142,110
+"Navigation",0.9421,7841,4,4,142,111
+"Ease of Use",0,4774,3.5,4,142,111
+"Offline Access",0.0055,6253,3,3,142,109
