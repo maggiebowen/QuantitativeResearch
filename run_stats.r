@@ -33,6 +33,31 @@ run_ttest <- function(gmap_col_index, amap_col_index, label, df) {
   ))
 }
 
+# ---- filtered OS for t-tests ----
+# only Android and iOS users (exclude "Both")
+data_os_filtered <- subset(data, trimws(data[[6]]) %in% c("Android", "iOS (iPhone)"))
+
+run_os_ttest <- function(response_col, label, df) {
+  values <- as.numeric(trimws(df[[response_col]]))
+  os <- factor(trimws(df[[6]]))  # Column 6 is Operating System
+  df_clean <- data.frame(response = values, os = os)
+  df_clean <- na.omit(df_clean)
+
+  test_result <- t.test(response ~ os, data = df_clean, conf.level = 0.95)
+
+  return(data.frame(
+    Question = label,
+    p_value = round(test_result$p.value, 4),
+    t_statistic = round(test_result$statistic, 3),
+    mean_android = round(mean(df_clean$response[df_clean$os == "Android"]), 3),
+    mean_ios = round(mean(df_clean$response[df_clean$os == "iOS (iPhone)"]), 3),
+    ci_lower = round(test_result$conf.int[1], 3),
+    ci_upper = round(test_result$conf.int[2], 3),
+    n_android = sum(df_clean$os == "Android"),
+    n_ios = sum(df_clean$os == "iOS (iPhone)")
+  ))
+}
+
 # ---- Mann-Whitney U test ----
 run_likert_test <- function(gmap_col_index, amap_col_index, label, df) {
   likert_levels <- c("terrible", "bad", "average", "good", "excellent")
@@ -91,6 +116,19 @@ ttest_labels <- c(
   "Schedule Match"
 )
 
+os_test_columns <- c(27, 28, 29, 30, 31, 32, 33, 34, 35)
+os_test_labels <- c(
+  "Visual Design (OS)", "Meets Needs (OS)", "PT Updates (OS)", "PT Coverage (OS)",
+  "Arrival/Departure Time (OS)", "Find Stops (OS)", "Share ETA (OS)",
+  "Multiple Stops (OS)", "Schedule Match (OS)"
+)
+
+os_ttest_results <- do.call(rbind, Map(
+  function(col, label) run_os_ttest(col, label, data_os_filtered),
+  os_test_columns,
+  os_test_labels
+))
+
 likert_pairs <- list(
   c(22, 40),  # Public Transport
   c(23, 41),  # Real-Time Info
@@ -106,7 +144,6 @@ likert_labels <- c(
   "Ease of Use",
   "Offline Access"
 )
-
 
 # Run t-tests
 ttest_results <- do.call(rbind, Map(
@@ -124,6 +161,9 @@ likert_results <- do.call(rbind, Map(
 print("T-test Results:")
 print(ttest_results)
 
+print("OS T-test Results:")
+print(os_ttest_results)
+
 print("Mann-Whitney U Test Results for Likert Questions:")
 print(likert_results)
 
@@ -132,3 +172,6 @@ write.csv(ttest_results, "ttests_results.csv", row.names = FALSE)
 
 # export likert results to separate CSV
 write.csv(likert_results, "likert_test_results.csv", row.names = FALSE)
+
+# export OS t-tests to separate CSV
+write.csv(os_ttest_results, "os_ttest_results.csv", row.names = FALSE)
