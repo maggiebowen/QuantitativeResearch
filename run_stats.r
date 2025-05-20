@@ -1,7 +1,6 @@
 # Load data without converting strings to factors
 data <- read.csv('/Users/maggiebowen/Documents/GitHub/QuantitativeResearch/FINAL_MERGED_ANSWERS.csv', stringsAsFactors = FALSE)
 
-
 # ---- T-TESTS ----
 run_ttest <- function(gmap_col_index, amap_col_index, label, df) {
   # Extract columns and convert to numeric
@@ -58,6 +57,55 @@ run_os_ttest <- function(response_col, label, df) {
   ))
 }
 
+
+# ---- t-tests by frequency of public transport usage ----
+frequency_levels <- c(
+    "I do not use it",
+    "Only on weekends",
+    "1 to 3 times per month",
+    "1 to 3 times per week",
+    "4 to 7 times per week"
+  )
+
+get_max_frequency <- function(row) {
+  freqs <- as.character(row[7:10])
+  factor_freqs <- factor(freqs, levels = frequency_levels, ordered = TRUE)
+  return(as.character(max(factor_freqs)))
+}
+
+# find max freuqnecy for all rows
+data$Max_PT_Frequency <- apply(data, 1, get_max_frequency)
+
+
+ttests_by_frequency <- lapply(frequency_levels, function(freq) {
+  subset_df <- subset(data, Max_PT_Frequency == freq)
+  
+  result <- do.call(rbind, Filter(Negate(is.null), Map(
+    function(pair, label) {
+      freq_label <- paste0(label, " (", freq, ")")
+      
+      # Extract cleaned numeric data
+      gmap_vals <- as.numeric(trimws(subset_df[[pair[1]]]))
+      amap_vals <- as.numeric(trimws(subset_df[[pair[2]]]))
+      gmap_vals <- na.omit(gmap_vals)
+      amap_vals <- na.omit(amap_vals)
+      
+      # Only run t-test if both groups have > 1 value because before it was being blocked
+      if (length(unique(c(gmap_vals, amap_vals))) < 2 ||
+          length(gmap_vals) < 2 || length(amap_vals) < 2) {
+        return(NULL)
+      }
+
+      return(run_ttest(pair[1], pair[2], freq_label, subset_df))
+    },
+    ttest_pairs,
+    ttest_labels
+  )))
+  
+  return(result)
+})
+
+
 # ---- Mann-Whitney U test ----
 run_likert_test <- function(gmap_col_index, amap_col_index, label, df) {
   likert_levels <- c("terrible", "bad", "average", "good", "excellent")
@@ -89,7 +137,6 @@ run_likert_test <- function(gmap_col_index, amap_col_index, label, df) {
     n_amap = length(amap_vals)
   ))
 }
-
 
 # ---- T-TESTS calls ----
 ttest_pairs <- list(
@@ -128,6 +175,8 @@ os_ttest_results <- do.call(rbind, Map(
   os_test_columns,
   os_test_labels
 ))
+
+ttests_by_frequency_df <- do.call(rbind, ttests_by_frequency)
 
 likert_pairs <- list(
   c(22, 40),  # Public Transport
@@ -175,3 +224,6 @@ write.csv(likert_results, "likert_test_results.csv", row.names = FALSE)
 
 # export OS t-tests to separate CSV
 write.csv(os_ttest_results, "os_ttest_results.csv", row.names = FALSE)
+
+# export t-tests by frequency to separate CSV
+write.csv(ttests_by_frequency_df, "ttests_by_frequency.csv", row.names = FALSE)

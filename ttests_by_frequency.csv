@@ -1,0 +1,37 @@
+"Question","p_value","t_statistic","mean_gmap","mean_amap","ci_lower","ci_upper","n_gmap","n_amap"
+"Visual Design (I do not use it)",0.5,1,3,4,-11.706,13.706,2,2
+"Meets Needs (I do not use it)",0.5,1,3.5,4,-5.853,6.853,2,2
+"Public Transport Updates (I do not use it)",0.2048,-3,4,2.5,-7.853,4.853,2,2
+"Public Transport Coverage (I do not use it)",0.7117,-0.447,3.5,3,-7.419,6.419,2,2
+"Arrival/Departure Time Adjustment (I do not use it)",0.5,-1,4,3.5,-6.853,5.853,2,2
+"Find Stops/Stations (I do not use it)",1,0,4.5,4.5,-3.042,3.042,2,2
+"Share Route/ETA (I do not use it)",0.5,1,4.5,5,-5.853,6.853,2,2
+"Multiple Stops (I do not use it)",1,0,4.5,4.5,-3.042,3.042,2,2
+"Schedule Match (I do not use it)",0.2048,3,3.5,5,-4.853,7.853,2,2
+"Visual Design (1 to 3 times per month)",0.1435,1.54,3.545,4.1,-0.21,1.319,11,10
+"Meets Needs (1 to 3 times per month)",0.8314,0.216,3.636,3.7,-0.554,0.681,11,10
+"Public Transport Updates (1 to 3 times per month)",0.1454,1.52,3.091,3.5,-0.155,0.974,11,10
+"Public Transport Coverage (1 to 3 times per month)",0.3832,-0.893,3.818,3.6,-0.73,0.293,11,10
+"Arrival/Departure Time Adjustment (1 to 3 times per month)",0.0332,2.34,3.273,4,0.066,1.388,11,10
+"Find Stops/Stations (1 to 3 times per month)",0.7271,0.354,3.455,3.6,-0.715,1.006,11,10
+"Share Route/ETA (1 to 3 times per month)",0.0902,1.794,3.364,4.1,-0.128,1.601,11,10
+"Multiple Stops (1 to 3 times per month)",0.93,-0.089,3.636,3.6,-0.892,0.819,11,10
+"Schedule Match (1 to 3 times per month)",0.0052,3.181,3.455,4.556,0.373,1.829,11,9
+"Visual Design (1 to 3 times per week)",0.2839,1.142,3,3.857,-0.849,2.564,6,7
+"Meets Needs (1 to 3 times per week)",0.2678,1.194,3,3.857,-0.807,2.522,6,7
+"Public Transport Updates (1 to 3 times per week)",0.0683,2.023,2.5,3.714,-0.109,2.537,6,7
+"Public Transport Coverage (1 to 3 times per week)",0.7251,0.361,3.167,3.429,-1.343,1.867,6,7
+"Arrival/Departure Time Adjustment (1 to 3 times per week)",0.195,1.414,3.167,4.143,-0.615,2.567,6,7
+"Find Stops/Stations (1 to 3 times per week)",0.4441,0.798,3.5,4,-0.902,1.902,6,7
+"Share Route/ETA (1 to 3 times per week)",0.1221,1.691,2.2,3.286,-0.348,2.519,5,7
+"Multiple Stops (1 to 3 times per week)",0.3898,0.91,3.5,4.143,-0.991,2.276,6,7
+"Schedule Match (1 to 3 times per week)",0.3601,1,3.333,4.2,-1.315,3.048,6,5
+"Visual Design (4 to 7 times per week)",0,5.784,2.947,4.289,0.878,1.807,38,38
+"Meets Needs (4 to 7 times per week)",0.2375,1.191,3.447,3.684,-0.159,0.633,38,38
+"Public Transport Updates (4 to 7 times per week)",0.0049,2.917,2.886,3.526,0.202,1.079,35,38
+"Public Transport Coverage (4 to 7 times per week)",0.1481,-1.462,3.618,3.211,-0.962,0.148,34,38
+"Arrival/Departure Time Adjustment (4 to 7 times per week)",0.8695,0.165,3.694,3.73,-0.392,0.462,36,37
+"Find Stops/Stations (4 to 7 times per week)",0.3736,0.895,3.389,3.605,-0.265,0.698,36,38
+"Share Route/ETA (4 to 7 times per week)",0.0055,2.869,3.147,3.842,0.212,1.178,34,38
+"Multiple Stops (4 to 7 times per week)",0.1671,1.397,3.088,3.474,-0.165,0.936,34,38
+"Schedule Match (4 to 7 times per week)",0,4.332,3.171,4.211,0.561,1.517,35,38
