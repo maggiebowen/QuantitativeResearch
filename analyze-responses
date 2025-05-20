@@ -1,5 +1,5 @@
 # Load data without converting strings to factors
-data <- read.csv('/Users/maggiebowen/Documents/R/FINAL_MERGED_ANSWERS.csv', stringsAsFactors = FALSE)
+data <- read.csv('/Users/maggiebowen/Documents/GitHub/QuantitativeResearch/FINAL_MERGED_ANSWERS.csv', stringsAsFactors = FALSE)
 
 #  ---- helper functions ----
 analyze_categorical <- function(column_data, levels = NULL, label = NULL) {
@@ -64,69 +64,6 @@ analyze_multiselect <- function(column_data, label) {
     Count = as.vector(tab),
     Percentage = as.vector(percent),
     Question = label
-  ))
-}
-
-# ---- T-TESTS ----
-run_ttest <- function(gmap_col_index, amap_col_index, label, df) {
-  # Extract columns and convert to numeric
-  gmap_raw <- as.numeric(trimws(df[[gmap_col_index]]))
-  amap_raw <- as.numeric(trimws(df[[amap_col_index]]))
-  
-  # Remove NAs
-  gmap_vals <- na.omit(gmap_raw)
-  amap_vals <- na.omit(amap_raw)
-
-  # combine data frame
-  ratings <- c(gmap_vals, amap_vals)
-  app <- factor(c(rep("Google Maps", length(gmap_vals)), rep("Apple Maps", length(amap_vals))))
-  df_long <- data.frame(rating = ratings, app = app)
-
-  # Run independent t-test with confidence interval
-  test_result <- t.test(rating ~ app, data = df_long, conf.level = 0.95)
-
-  return(data.frame(
-    Question = label,
-    p_value = round(test_result$p.value, 4),
-    t_statistic = round(test_result$statistic, 3),
-    mean_gmap = round(mean(gmap_vals), 3),
-    mean_amap = round(mean(amap_vals), 3),
-    ci_lower = round(test_result$conf.int[1], 3),
-    ci_upper = round(test_result$conf.int[2], 3),
-    n_gmap = length(gmap_vals),
-    n_amap = length(amap_vals)
-  ))
-}
-
-# ---- Mann-Whitney U test ----
-run_likert_test <- function(gmap_col_index, amap_col_index, label, df) {
-  likert_levels <- c("terrible", "bad", "average", "good", "excellent")
-
-  # Clean and factor responses
-  gmap_raw <- tolower(trimws(df[[gmap_col_index]]))
-  amap_raw <- tolower(trimws(df[[amap_col_index]]))
-
-  gmap_clean <- factor(gmap_raw[gmap_raw %in% likert_levels], levels = likert_levels, ordered = TRUE)
-  amap_clean <- factor(amap_raw[amap_raw %in% likert_levels], levels = likert_levels, ordered = TRUE)
-
-  gmap_numeric <- as.numeric(gmap_clean)
-  amap_numeric <- as.numeric(amap_clean)
-
-  # Remove NA values
-  gmap_vals <- na.omit(gmap_numeric)
-  amap_vals <- na.omit(amap_numeric)
-
-  # Run Mann-Whitney U test
-  test_result <- wilcox.test(gmap_vals, amap_vals)
-
-  return(data.frame(
-    Question = label,
-    p_value = round(test_result$p.value, 4),
-    W_statistic = round(test_result$statistic, 3),
-    median_gmap = median(gmap_vals),
-    median_amap = median(amap_vals),
-    n_gmap = length(gmap_vals),
-    n_amap = length(amap_vals)
   ))
 }
 
@@ -218,47 +155,6 @@ amap_share_ETA <- analyze_scale_1to5(data[[51]], "Amaps Share ETA")
 amap_multiple_stops <- analyze_scale_1to5(data[[52]], "Amaps Multiple Stops")
 amap_schedule_match <- analyze_scale_1to5(data[[53]], "Amaps Schedule Match")
 
-# ---- T-TESTS calls ----
-ttest_pairs <- list(
-  c(27, 45),  # Visual Design
-  c(28, 46),  # Meets Needs
-  c(29, 47),  # Public Transport Updates
-  c(30, 48),  # Public Transport Coverage
-  c(31, 49),  # Time Adjustment
-  c(32, 50),  # Find Stops
-  c(33, 51),  # Share ETA
-  c(34, 52),  # Multiple Stops
-  c(35, 53)   # Schedule Match
-)
-
-ttest_labels <- c(
-  "Visual Design",
-  "Meets Needs",
-  "Public Transport Updates",
-  "Public Transport Coverage",
-  "Arrival/Departure Time Adjustment",
-  "Find Stops/Stations",
-  "Share Route/ETA",
-  "Multiple Stops",
-  "Schedule Match"
-)
-
-likert_pairs <- list(
-  c(22, 40),  # Public Transport
-  c(23, 41),  # Real-Time Info
-  c(24, 42),  # Navigation
-  c(25, 43),  # Ease of Use
-  c(26, 44)   # Offline Access
-)
-
-likert_labels <- c(
-  "Public Transport",
-  "Real-Time Info",
-  "Navigation",
-  "Ease of Use",
-  "Offline Access"
-)
-
 # ---- Combine into one summary table ----
 all_summaries <- rbind(
   gender_summary,
@@ -311,27 +207,3 @@ write.csv(all_summaries[, c("Question", "Rating", "Count", "Percentage")],
           file = "analyze-responses-results.csv",
           row.names = FALSE)
 
-# Run t-tests
-ttest_results <- do.call(rbind, Map(
-  function(pair, label) run_ttest(pair[1], pair[2], label, data),
-  ttest_pairs,
-  ttest_labels
-))
-
-likert_results <- do.call(rbind, Map(
-  function(pair, label) run_likert_test(pair[1], pair[2], label, data),
-  likert_pairs,
-  likert_labels
-))
-
-print("T-test Results:")
-print(ttest_results)
-
-print("Mann-Whitney U Test Results for Likert Questions:")
-print(likert_results)
-
-# export t-tests to separate CSV
-write.csv(ttest_results, "ttests_results.csv", row.names = FALSE)
-
-# export likert results to separate CSV
-write.csv(likert_results, "likert_test_results.csv", row.names = FALSE)
