@@ -176,8 +176,6 @@ os_ttest_results <- do.call(rbind, Map(
   os_test_labels
 ))
 
-ttests_by_frequency_df <- do.call(rbind, ttests_by_frequency)
-
 likert_pairs <- list(
   c(22, 40),  # Public Transport
   c(23, 41),  # Real-Time Info
@@ -200,6 +198,8 @@ ttest_results <- do.call(rbind, Map(
   ttest_pairs,
   ttest_labels
 ))
+
+ttests_by_frequency_df <- do.call(rbind, ttests_by_frequency)
 
 likert_results <- do.call(rbind, Map(
   function(pair, label) run_likert_test(pair[1], pair[2], label, data),
