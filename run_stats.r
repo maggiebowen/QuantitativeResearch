@@ -227,3 +227,68 @@ write.csv(os_ttest_results, "os_ttest_results.csv", row.names = FALSE)
 
 # export t-tests by frequency to separate CSV
 write.csv(ttests_by_frequency_df, "ttests_by_frequency.csv", row.names = FALSE)
+
+# Define frequency levels (optional: reorder them for consistency)
+valid_freq_levels <- c(
+  "I do not use it",
+  "I use it occasionally",
+  "A few times per month",
+  "1 to 3 times per week",
+  "4 to 6 times per week",
+  "Every day"
+)
+
+# Clean frequency columns
+data$Gmaps_Usage_Freq <- factor(trimws(data[[21]]), levels = valid_freq_levels, ordered = TRUE)
+data$Amaps_Usage_Freq <- factor(trimws(data[[39]]), levels = valid_freq_levels, ordered = TRUE)
+
+# Column indices for 1–5 scale questions
+gmap_cols <- 27:35
+amap_cols <- 45:53
+
+labels <- c(
+  "Visual Design", "Meets Needs", "PT Updates", "PT Coverage",
+  "Arrival/Departure Time", "Find Stops", "Share ETA",
+  "Multiple Stops", "Schedule Match"
+)
+
+# Function to run ANOVA for one app
+run_anova_set <- function(rating_cols, freq_col, app_name) {
+  results <- list()
+  for (i in seq_along(rating_cols)) {
+    col_index <- rating_cols[i]
+    label <- labels[i]
+    
+    ratings <- as.numeric(trimws(data[[col_index]]))
+    freq <- data[[freq_col]]
+    
+    df <- data.frame(rating = ratings, frequency = freq)
+    df <- na.omit(df)
+    
+    if (length(unique(df$frequency)) > 1) {
+      model <- aov(rating ~ frequency, data = df)
+      p_val <- summary(model)[[1]]["Pr(>F)"][1]
+      
+      results[[label]] <- data.frame(
+        Question = label,
+        p_value = round(p_val, 4),
+        n = nrow(df)
+      )
+    }
+  }
+  return(do.call(rbind, results))
+}
+
+# Run for both apps
+gmap_anova_results <- run_anova_set(gmap_cols, "Gmaps_Usage_Freq", "Google Maps")
+amap_anova_results <- run_anova_set(amap_cols, "Amaps_Usage_Freq", "Apple Maps")
+
+# Print and export
+print("Google Maps ANOVA results:")
+print(gmap_anova_results)
+
+print("Apple Maps ANOVA results:")
+print(amap_anova_results)
+
+write.csv(gmap_anova_results, "anova_gmaps_by_usage_freq.csv", row.names = FALSE)
+write.csv(amap_anova_results, "anova_amaps_by_usage_freq.csv", row.names = FALSE)
