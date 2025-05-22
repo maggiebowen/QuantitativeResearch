@@ -267,11 +267,15 @@ run_anova_set <- function(rating_cols, freq_col, app_name) {
     
     if (length(unique(df$frequency)) > 1) {
       model <- aov(rating ~ frequency, data = df)
-      p_val <- summary(model)[[1]]["Pr(>F)"][1]
+      model_summary <- summary(model)[[1]]
+      
+      p_val <- model_summary["Pr(>F)"][1]
+      f_stat <- model_summary["F value"][1]
       
       results[[label]] <- data.frame(
         Question = label,
         p_value = round(p_val, 4),
+        F_statistic = round(f_stat, 3),
         n = nrow(df)
       )
     }
